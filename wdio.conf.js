@@ -1,10 +1,10 @@
-export const config = {
+//export const config = {
     //
     // ====================
     // Runner Configuration
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
-    runner: 'local',
+  //  runner: 'local',
     //
     // ==================
     // Specify Test Files
@@ -20,13 +20,14 @@ export const config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: [
-        './test/specs/**/*.js'
-    ],
+   // specs: [
+  //      './test/specs/**/*.js'
+
+  //  ],
     // Patterns to exclude.
-    exclude: [
+ //   exclude: [
         // 'path/to/excluded/files'
-    ],
+  //  ],
     //
     // ============
     // Capabilities
@@ -43,15 +44,15 @@ export const config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+   // maxInstances: 10,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
-        browserName: 'chrome'
-    }],
+ //   capabilities: [{
+   //     browserName: 'chrome'
+    //}],
 
     //
     // ===================
@@ -60,7 +61,7 @@ export const config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+  //  logLevel: 'info',
     //
     // Set specific log levels per logger
     // loggers:
@@ -78,7 +79,7 @@ export const config = {
     //
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
-    bail: 0,
+  //  bail: 0,
     //
     // Set a base URL in order to shorten url command calls. If your `url` parameter starts
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
@@ -87,14 +88,14 @@ export const config = {
     // baseUrl: 'http://localhost:8080',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+ //   waitforTimeout: 10000,
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
-    connectionRetryTimeout: 120000,
+ //   connectionRetryTimeout: 120000,
     //
     // Default request retries count
-    connectionRetryCount: 3,
+  //  connectionRetryCount: 3,
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
@@ -108,7 +109,7 @@ export const config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
-    framework: 'jasmine',
+  //  framework: 'jasmine',
     
     //
     // The number of times to retry the entire specfile when it fails as a whole
@@ -123,20 +124,35 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'],
+    //reporters: ['spec',
+
+      //   ['allure', {
+        //   outputDir: 'allure-results',
+          // disableWebdriverStepsReporting: true,
+           //disableWebdriverScreenshotsReporting: false,
+ // }]
+        //   ['html-nice', {
+        //     outputDir: './reports/html-reports/',
+        //     filename: 'report.html',
+        //     reportTitle: 'WDIO Test Report',
+        //     showInBrowser: true,  // <--- ensures report is opened after run
+        //     collapseTests: false,
+        //     useOnAfterCommandForScreenshot: false
+        // }]
+    //],
 
     // Options to be passed to Jasmine.
-    jasmineOpts: {
+   // jasmineOpts: {
         // Jasmine default timeout
-        defaultTimeoutInterval: 60000,
+      //  defaultTimeoutInterval: 60000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time
         // an assertion fails.
-        expectationResultHandler: function(passed, assertion) {
+      //  expectationResultHandler: function(passed, assertion) {
             // do something
-        }
-    },
+      //  }
+    //},
 
     //
     // =====
@@ -148,8 +164,8 @@ export const config = {
     // resolved to continue.
     /**
      * Gets executed once before all workers get launched.
-     * @param {object} config wdio configuration object
-     * @param {Array.<Object>} capabilities list of capabilities details
+   //  * @param {object} config wdio configuration object
+   //  * @param {Array.<Object>} capabilities list of capabilities details
      */
     // onPrepare: function (config, capabilities) {
     // },
@@ -204,6 +220,7 @@ export const config = {
      * @param {object} suite suite details
      */
     // beforeSuite: function (suite) {
+    //     browser.maximizeWindow()
     // },
     /**
      * Function to be executed before a test (in Mocha/Jasmine) starts.
@@ -297,4 +314,85 @@ export const config = {
     */
     // afterAssertion: function(params) {
     // }
-}
+//}
+
+
+
+import { ReportAggregator, HtmlReporter } from 'wdio-html-nice-reporter';
+
+export const config = {
+    runner: 'local',
+
+    specs: [
+        './test/specs/**/*.js'
+    ],
+
+    exclude: [],
+     beforeSuite: function (suite) {
+        browser.maximizeWindow()
+    },
+
+    maxInstances: 10,
+
+    capabilities: [{
+        browserName: 'chrome'
+    }],
+
+    logLevel: 'info',
+
+    bail: 0,
+
+    waitforTimeout: 10000,
+    connectionRetryTimeout: 120000,
+    connectionRetryCount: 3,
+
+    framework: 'jasmine',
+
+    reporters: [
+        'spec',
+        ['html-nice', {
+            outputDir: './reports/html-reports/',
+            filename: 'report.html',
+            reportTitle: 'Swag Automation Test Report',
+            linkScreenshots: true,
+            showInBrowser: true,
+            collapseTests: false,
+            useOnAfterCommandForScreenshot: true,
+            writeToFile: true
+        }]
+    ],
+
+    //
+    // Required for final HTML report generation
+    //
+    onPrepare: function (config, capabilities) {
+        const reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'master-report.html',
+            reportTitle: 'Master Report',
+            browserName: capabilities[0].browserName,
+        });
+        reportAggregator.clean();
+        global.reportAggregator = reportAggregator;
+    },
+
+    onComplete: async function (exitCode, config, capabilities, results) {
+        await global.reportAggregator.createReport();
+    },
+
+    //
+    // Take screenshot on test failure
+    //
+    afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+        if (!passed) {
+            await browser.takeScreenshot();
+        }
+    },
+
+    jasmineOpts: {
+        defaultTimeoutInterval: 60000,
+        expectationResultHandler: function (passed, assertion) {
+            // optional
+        }
+    },
+};
